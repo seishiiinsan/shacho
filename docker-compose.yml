@@ -1,0 +1,33 @@
+services:
+    pgsql:
+        image: postgres:17
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-password}'
+            POSTGRES_DB: '${DB_DATABASE:-shacho}'
+            POSTGRES_USER: '${DB_USERNAME:-postgres}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-password}'
+        volumes:
+            - shacho-pgsql:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD', 'pg_isready', '-q', '-d', '${DB_DATABASE:-shacho}', '-U', '${DB_USERNAME:-postgres}']
+            retries: 3
+            timeout: 5s
+
+    redis:
+        image: redis:7-alpine
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - shacho-redis:/data
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            retries: 3
+            timeout: 5s
+
+volumes:
+    shacho-pgsql:
+        driver: local
+    shacho-redis:
+        driver: local
