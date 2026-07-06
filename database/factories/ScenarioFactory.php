@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Scenario;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Scenario>
+ */
+class ScenarioFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'nom' => fake()->catchPhrase(),
+            'description' => fake()->paragraph(),
+            'config' => [],
+        ];
+    }
+}
